@@ -1,14 +1,14 @@
 # Contributor: Carlo Landmeter <clandmeter@gmail.com>
+# Contributor: Marvin Steadfast <marvin@xsteadfastx.org>
 # Maintainer:
 pkgname=py-gst1
 pkgver=1.8.1
-pkgrel=0
+pkgrel=1
 pkgdesc="GStreamer Python binding"
 url="https://cgit.freedesktop.org/gstreamer/gst-python/"
 arch="all"
 license="LGPL-2.1"
-depends=""
-depends_dev="py-gobject3 gst-plugins-base1"
+depends="py-gobject3 gstreamer1"
 makedepends="gstreamer1-dev py-gobject3-dev python2-dev gst-plugins-base1-dev
 	"
 install=""
@@ -25,14 +25,13 @@ build() {
 		--prefix=/usr \
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \
-		--localstatedir=/var \
-		|| return 1
-	make || return 1
+		--localstatedir=/var
+	make
 }
 
 package() {
 	cd "$builddir"
-	make DESTDIR="$pkgdir" install || return 1
+	make DESTDIR="$pkgdir" install
 }
 
 sha512sums="4ff6244048d24c1b51efd72f7bfb75be401f53c552c0f6282ee7eb80790f46f320c9952bcc4c2be88d56e4564b66993b5e8a67e876ec4eb2445e598c7e2abd95  gst-python-1.8.1.tar.xz"
