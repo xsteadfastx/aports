@@ -1,0 +1,52 @@
+# Contributor: 
+# Maintainer: Marvin Steadfast <marvin@xsteadfastx.org>
+pkgname=libcanberra-pulse
+_main_pkgname=libcanberra
+pkgver=0.30
+pkgrel=0
+pkgdesc="Simple audio library for GTK applications"
+url="http://0pointer.de/lennart/projects/libcanberra/"
+arch="all"
+options="!check"  # No test suite.
+license="LGPL-2.1+"
+depends="libcanberra"
+makedepends="libogg-dev libvorbis-dev libtool pulseaudio-dev"
+install=
+subpackages=""
+source="https://dev.alpinelinux.org/archive/$pkgname/$_main_pkgname-$pkgver.tar.xz"
+builddir="$srcdir/$_main_pkgname-$pkgver"
+
+prepare() {
+	cd "$builddir"
+	update_config_sub
+	default_prepare
+}
+
+build() {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--disable-alsa \
+		--disable-oss \
+		--disable-udev \
+		--disable-gstreamer \
+		--disable-null \
+		--disable-gtk \
+		--disable-gtk3 \
+		--disable-tdb \
+		--disable-lynx
+	make
+}
+
+package() {
+	cd "$builddir"
+	make -j1 DESTDIR="$builddir/_tmp" install
+	install -Dm644 "$builddir"/_tmp/usr/lib/"$_main_pkgname-$pkgver"/libcanberra-pulse.so "$pkgdir"/usr/lib/"$_main_pkgname-$pkgver"/libcanberra-pulse.so
+}
+
+sha512sums="f7543582122256826cd01d0f5673e1e58d979941a93906400182305463d6166855cb51f35c56d807a56dc20b7a64f7ce4391368d24990c1b70782a7d0b4429c2  libcanberra-0.30.tar.xz"
